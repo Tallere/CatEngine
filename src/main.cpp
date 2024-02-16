@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 
 #include "rendering/cWindow.h"
 #include "rendering/cRenderer.h"
@@ -11,23 +11,39 @@ int main()
 	window.create( 800, 600, "Catengine.exe" );
 	renderer.create( window );
 
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
+	float vertices[] = 
+	{
+		0.5f,  0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+	   -0.5f, -0.5f, 0.0f,
+	   -0.5f,  0.5f, 0.0f
+	};
+	unsigned int indices[] = 
+	{ 
+		0, 1, 3,
+		1, 2, 3
 	};
 
-	unsigned int vao;
-	glGenVertexArrays( 1, &vao );
-	glBindVertexArray( vao );
+	unsigned int VBO, VAO, EBO;
+	glGenVertexArrays( 1, &VAO );
+	glGenBuffers( 1, &VBO );
+	glGenBuffers( 1, &EBO );
 
-	unsigned int vbo;
-	glGenBuffers( 1, &vbo );
-	glBindBuffer( GL_ARRAY_BUFFER, vbo );
+	glBindVertexArray( VAO );
+
+	glBindBuffer( GL_ARRAY_BUFFER, VBO );
 	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
 
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( float ), (void*)0 );
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, EBO );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( indices ), indices, GL_STATIC_DRAW );
+
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( float ), ( void* ) 0 );
 	glEnableVertexAttribArray( 0 );
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	 glBindVertexArray(0); 
+
 
 	while ( !window.shouldClose() )
 	{
@@ -38,8 +54,10 @@ int main()
 		glClear( GL_COLOR_BUFFER_BIT );
 
 		glUseProgram( renderer.getDefaultShader() );
-		glBindVertexArray( vao );
-		glDrawArrays( GL_TRIANGLES, 0, 3 );
+		glBindVertexArray( VAO );
+		glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
+		glBindVertexArray( 0 );
+
 
 		window.endFrame();
 	}

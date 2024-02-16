@@ -2,7 +2,7 @@
 
 #include "cWindow.h"
 
-#include <stdio.h>
+#include <cstdio>
 
 cRenderer::cRenderer()
 {
