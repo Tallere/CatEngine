@@ -46,6 +46,7 @@ int cWindow::create( unsigned int _width, unsigned int _height, const char* _tit
 	m_width = _width;
 	m_height = _height;
 
+	return 0;
 }
 
 void cWindow::startFrame( void )

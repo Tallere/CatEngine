@@ -24,6 +24,8 @@ bool cRenderer::create( cWindow& _window )
 	glViewport( 0, 0, _window.getWidth(), _window.getHeight() );
 
 	createDefaultShader();
+
+	return true;
 }
 
 void cRenderer::clear( unsigned char _color )
